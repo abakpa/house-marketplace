@@ -25,6 +25,13 @@ function Profile() {
     console.log(123);
   };
 
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.id]: e.target.value,
+    }));
+  };
+
   return (
     <div className="profile">
       <header className="profileHeader">
@@ -51,6 +58,18 @@ function Profile() {
             <input
               type="text"
               className={!changeDetails ? "profileName" : "profileNameActive"}
+              disabled={!changeDetails}
+              id="name"
+              value={name}
+              onChange={onChange}
+            />
+            <input
+              type="text"
+              className={!changeDetails ? "profileEmail" : "profileEmailActive"}
+              disabled={!changeDetails}
+              id="email"
+              value={email}
+              onChange={onChange}
             />
           </form>
         </div>
