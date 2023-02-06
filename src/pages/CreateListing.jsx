@@ -3,9 +3,10 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
+import { async } from "@firebase/util";
 
 function CreateListing() {
-  const [geolocationEnabled, setGeolocationEnabled] = useState(true);
+  const [geolocationEnabled, setGeolocationEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     type: "rent",
@@ -59,7 +60,7 @@ function CreateListing() {
     };
   }, [isMounted]);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -78,11 +79,30 @@ function CreateListing() {
     let geolocation = {};
     let location;
     if (geolocationEnabled) {
+      const response = await fetch(
+        //i don't have a google geolocation account
+        `google-geolocation-api-address?address=${address}&key=your-api-key`
+      );
+      const data = await response.json();
+      geolocation.lat = data.result[0]?.geometry.location.lat ?? 0;
+      geolocation.lng = data.result[0]?.geometry.location.lng ?? 0;
+      location =
+        data.status === "ZERO_RESULTS"
+          ? undefined
+          : data.results[0]?.formatted_address;
+
+      if (location === undefined || location.includes("undefined")) {
+        setLoading(false);
+        toast.error("Please enter a correct address");
+        return;
+      }
     } else {
       geolocation.lat = latitude;
       geolocation.lng = longitude;
       location = address;
+      console.log(geolocation, location);
     }
+    setLoading(false);
   };
 
   const onMutate = (e) => {
