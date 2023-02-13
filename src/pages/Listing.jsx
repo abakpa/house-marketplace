@@ -60,6 +60,7 @@ function Listing() {
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </p>
+        <p className="listingLocation">{listing.location}</p>
       </div>
     </main>
   );
