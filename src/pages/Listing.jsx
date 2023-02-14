@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { MapContainer, Marker, Popup, TilerLayer } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  TilerLayer,
+} from "react-leaflet";
 import { getDoc, doc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase.config";
@@ -92,7 +98,12 @@ function Listing() {
             center={[listing.geolocation.lat, listing.geolocation.lng]}
             zoom={13}
             scrollWheelZoom={false}
-          ></MapContainer>
+          >
+            <TileLayer
+              attribution='&copy;<a href="http://osm.org/copyright">OpenStreetMap</a>contributors'
+              url="https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png"
+            />
+          </MapContainer>
         </div>
 
         {auth.currentUser?.uid !== listing.userRef && (
