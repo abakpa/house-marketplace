@@ -103,6 +103,11 @@ function Listing() {
               attribution='&copy;<a href="http://osm.org/copyright">OpenStreetMap</a>contributors'
               url="https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png"
             />
+            <Marker
+              position={[listing.geolocation.lat, listing.geolocation.lng]}
+            >
+              <Popup>{listing.location}</Popup>
+            </Marker>
           </MapContainer>
         </div>
 
